@@ -382,7 +382,7 @@ export function Dashboard() {
   ) => {
     try {
       const promises = Object.entries(limits).map(([id, limit]) => {
-        return categoryService.update(Number(id), { limit });
+        return categoryService.update(Number(id), { limit: limit ?? undefined });
       });
 
       await Promise.all(promises);
@@ -873,7 +873,9 @@ export function Dashboard() {
 
               {/* A cor de alerta fica apenas aqui, no detalhe informativo */}
               <div
-                className={`text-xs font-medium ${kpi.color || "text-slate-400"}`}
+                className={`text-xs font-medium ${
+                  kpi.detailColor || "text-slate-400"
+                }`}
               >
                 {kpi.detail}
               </div>

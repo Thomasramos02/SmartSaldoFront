@@ -1,4 +1,4 @@
-import api from "./api"; // Sua instância do Axios com o token configurado
+import api from "./api";
 
 export interface ReportData {
   month: string;
@@ -28,19 +28,19 @@ export interface ReportData {
 }
 
 const reportService = {
-  // Chamada para a rota que retorna o JSON (Visualização no Dashboard)
+  // Backend expects 0-indexed months (0 = Janeiro). Send as-is.
   getReportData: async (month: number, year: number): Promise<ReportData> => {
-    // Backend expects 0-indexed months (0 = Janeiro). Send as-is.
     const response = await api.get<ReportData>(`/reports/generate`, {
       params: { month, year },
     });
     return response.data;
   },
 
-  // Chamada para a rota que retorna o PDF (Binário)
-  // Retorna o ArrayBuffer com o conteúdo do PDF para que o componente possa
-  // criar o Blob e controlar o download (mais testável e previsível).
-  downloadReportPdf: async (month: number, year: number): Promise<ArrayBuffer> => {
+  // Returns ArrayBuffer for PDF download.
+  downloadReportPdf: async (
+    month: number,
+    year: number,
+  ): Promise<ArrayBuffer> => {
     try {
       const response = await api.get(`/reports/download`, {
         params: { month, year },
@@ -48,39 +48,50 @@ const reportService = {
       });
 
       return response.data as ArrayBuffer;
-    } catch (err: any) {
-        // Tenta extrair uma mensagem amigável do corpo de erro (que pode vir como JSON)
-        if (err.response) {
-          const status = err.response.status;
-          const headers = err.response.headers;
-          let text = '';
-          try {
-            // response.data pode ser ArrayBuffer (quando axios tentou baixar)
-            if (err.response.data instanceof ArrayBuffer) {
-              text = new TextDecoder().decode(err.response.data);
-            } else if (typeof err.response.data === 'string') {
-              text = err.response.data;
-            } else {
-              text = JSON.stringify(err.response.data);
-            }
+    } catch (err: unknown) {
+      const fallbackMessage =
+        err instanceof Error
+          ? err.message
+          : "Erro desconhecido ao gerar relatorio";
+      const response = (err as { response?: any })?.response;
 
-            let parsedMessage = text;
-            try {
-              const parsed = JSON.parse(text);
-              parsedMessage = parsed.message || parsed.error || JSON.stringify(parsed);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (e) {
-              // não-JSON, keep text
-            }
+      if (!response) {
+        throw new Error(fallbackMessage);
+      }
 
-            console.error('reportService.downloadReportPdf error', { status, headers, parsedMessage });
-            throw new Error(`Status ${status}: ${parsedMessage}`);
-          } catch (err) {
-            throw new Error(err.message || 'Erro desconhecido ao gerar relatório');
-          }
+      const status = response.status;
+      const headers = response.headers;
+      let text = "";
+
+      try {
+        if (response.data instanceof ArrayBuffer) {
+          text = new TextDecoder().decode(response.data);
+        } else if (typeof response.data === "string") {
+          text = response.data;
+        } else {
+          text = JSON.stringify(response.data);
         }
 
-        throw new Error(err.message || 'Erro desconhecido ao gerar relatório');
+        let parsedMessage = text;
+        try {
+          const parsed = JSON.parse(text);
+          parsedMessage = parsed.message || parsed.error || JSON.stringify(parsed);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          // non-JSON, keep text
+        }
+
+        console.error("reportService.downloadReportPdf error", {
+          status,
+          headers,
+          parsedMessage,
+        });
+        throw new Error(`Status ${status}: ${parsedMessage}`);
+      } catch (innerErr) {
+        const message =
+          innerErr instanceof Error ? innerErr.message : fallbackMessage;
+        throw new Error(message);
+      }
     }
   },
 };
