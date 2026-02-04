@@ -45,7 +45,8 @@ export default function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           {/* 🔓 Rotas públicas */}
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
+
 
           <Route
             path="/login"
@@ -75,7 +76,6 @@ export default function App() {
               </PrivateRoute>
             }
           >
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/gastos" element={<Gastos />} />
             <Route path="/categorias" element={<Categorias />} />
