@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-inter text-sm text-slate-900;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1 {
+    @apply text-2xl font-semibold text-slate-900;
+  }
+  
+  h2 {
+    @apply text-xl font-semibold text-slate-900;
+  }
+  
+  h3 {
+    @apply text-lg font-semibold text-slate-900;
+  }
+  
+  p {
+    @apply text-sm text-slate-600;
+  }
+  
+  label {
+    @apply text-xs font-medium text-slate-500;
+  }
+}
+
+@layer components {
+  .input-field {
+    @apply block w-full pl-10 pr-4 py-2 text-sm border rounded-lg bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center bg-emerald-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center bg-white text-slate-700 border border-slate-300 py-2 px-4 rounded-lg font-medium text-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .kpi-value {
+    @apply text-3xl font-bold text-slate-900;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .kpi-label {
+    @apply text-xs font-medium text-slate-500 uppercase tracking-wide;
+  }
+  
+  .section-title {
+    @apply text-lg font-semibold text-slate-900 mb-4;
+  }
+  
+  .section-subtitle {
+    @apply text-sm text-slate-600 mb-3;
+  }
+
+  .divider {
+      @apply relative my-6 text-center text-xs text-slate-400;
+  }
+  .divider:before {
+      content: '';
+      @apply absolute top-1/2 left-0 w-full h-px bg-slate-200;
+  }
+  .divider > span {
+      @apply relative px-2 bg-white;
+  }
+
+  .form-error {
+    @apply mt-1 flex items-center gap-1 text-xs text-red-600;
+  }
+  
+  .form-hint {
+    @apply mt-1 text-xs text-slate-400;
+  }
+}
+
+/* Customização do Sonner Toast */
+.toaster {
+  --normal-bg: #f0fdf4 !important;
+  --normal-border: #dcfce7 !important;
+  --normal-text: #166534 !important;
+  --success-bg: #f0fdf4 !important;
+  --success-border: #dcfce7 !important;
+  --success-text: #166534 !important;
+  --error-bg: #fef2f2 !important;
+  --error-border: #fee2e2 !important;
+  --error-text: #991b1b !important;
+  --info-bg: #f0fdf4 !important;
+  --info-border: #dcfce7 !important;
+  --info-text: #166534 !important;
+  --warning-bg: #fffbeb !important;
+  --warning-border: #fef3c7 !important;
+  --warning-text: #92400e !important;
+}
+
+/* Toast success - Verde Emerald */
+.toaster .toast[data-type="success"],
+.sonner-toast.success {
+  background: #f0fdf4 !important;
+  border: 1px solid #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.toaster .toast[data-type="success"] svg,
+.sonner-toast.success svg {
+  color: #10b981 !important;
+}
+
+/* Toast info - Verde Emerald */
+.toaster .toast[data-type="info"],
+.sonner-toast.info {
+  background: #f0fdf4 !important;
+  border: 1px solid #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.toaster .toast[data-type="info"] svg,
+.sonner-toast.info svg {
+  color: #10b981 !important;
+}
+
+/* Toast error - Vermelho */
+.toaster .toast[data-type="error"],
+.sonner-toast.error {
+  background: #fef2f2 !important;
+  border: 1px solid #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.toaster .toast[data-type="error"] svg,
+.sonner-toast.error svg {
+  color: #dc2626 !important;
+}
+
+/* Alternativas com seletores mais gerais */
+:where(.sonner.toaster) {
+  --normal-bg: #f0fdf4;
+  --normal-border: #dcfce7;
+  --normal-text: #166534;
+  --success-bg: #f0fdf4;
+  --success-border: #dcfce7;
+  --success-text: #166534;
+  --error-bg: #fef2f2;
+  --error-border: #fee2e2;
+  --error-text: #991b1b;
+  --info-bg: #f0fdf4;
+  --info-border: #dcfce7;
+  --info-text: #166534;
+  --warning-bg: #fffbeb;
+  --warning-border: #fef3c7;
+  --warning-text: #92400e;
+}
+
+:where(.sonner.toaster) .toast {
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Verde Emerald para success */
+:where(.sonner.toaster) .toast.success {
+  background: #f0fdf4 !important;
+  border: 1px solid #dcfce7 !important;
+  color: #166534 !important;
+}
+
+:where(.sonner.toaster) .toast.success [data-icon] {
+  color: #10b981 !important;
+}
+
+/* Verde Emerald para info */
+:where(.sonner.toaster) .toast.info {
+  background: #f0fdf4 !important;
+  border: 1px solid #dcfce7 !important;
+  color: #166534 !important;
+}
+
+:where(.sonner.toaster) .toast.info [data-icon] {
+  color: #10b981 !important;
+}
+
+/* Vermelho para error */
+:where(.sonner.toaster) .toast.error {
+  background: #fef2f2 !important;
+  border: 1px solid #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+:where(.sonner.toaster) .toast.error [data-icon] {
+  color: #dc2626 !important;
+}
