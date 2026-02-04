@@ -60,9 +60,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Even if the request fails, clear local session to avoid stale UI
     } finally {
       clearSession();
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
     }
   }, [clearSession]);
 
