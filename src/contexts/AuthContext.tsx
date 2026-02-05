@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
   type ReactNode,
 } from "react";
 import api, { authService } from "../services/api";
@@ -30,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const hasCheckedAuth = useRef(false);
 
   const setSession = useCallback((user: User) => {
     setUser(user);
@@ -74,21 +76,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [clearSession]);
 
   const fetchUser = useCallback(async () => {
-    const { data } = await api.get<User>("/auth/me");
-    setUser(data);
-    setIsAuthenticated(true);
-  }, []);
+    try {
+      const { data } = await api.get<User>("/auth/me");
+      setUser(data);
+      setIsAuthenticated(true);
+      return true;
+    } catch {
+      clearSession();
+      return false;
+    }
+  }, [clearSession]);
 
   const checkAuth = useCallback(async () => {
+    if (hasCheckedAuth.current) return;
+
     setIsLoading(true);
     try {
       await fetchUser();
-    } catch {
-      await logout();
+    } catch (error) {
+      console.log("Usuário não autenticado");
+      clearSession();
     } finally {
       setIsLoading(false);
+      hasCheckedAuth.current = true;
     }
-  }, [fetchUser, logout]);
+  }, [fetchUser, clearSession]);
 
   /** 🔗 conecta com o axios interceptor */
   useEffect(() => {
@@ -96,9 +108,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     authService.logout = logout;
   }, [refreshAccessToken, logout]);
 
+  // Executa checkAuth apenas uma vez na montagem
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+    if (!hasCheckedAuth.current) {
+      checkAuth();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Dependências vazias intencionalmente
 
   return (
     <AuthContext.Provider
