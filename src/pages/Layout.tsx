@@ -1,6 +1,5 @@
 import {
   Bell,
-  Home,
   CreditCard,
   FolderOpen,
   Target,
@@ -109,17 +108,16 @@ export function Layout({ unreadNotifications, onReadAll }: LayoutProps) {
     <div className="min-h-screen bg-stone-50">
       {/* Sidebar Desktop */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-white border-r border-stone-200">
-        <div className="flex flex-col flex-1">
-          <Link to="/home" className="flex items-center gap-2 no-underline">
-            <div className="w-40 h-14 bg-gradient-to-br flex items-center justify-center shadow-sm">
-              <img
-                src={Logo}
-                alt="SmartSaldo Logo"
-                className="w-40 h-18 object-contain"
-              />
-            </div>
-          </Link>
-          <nav className="flex-1 px-4 py-6 space-y-1">
+                  <div className="flex flex-col flex-1">
+                  <div className="flex items-center gap-2 no-underline">
+                    <div className="w-40 h-14 bg-gradient-to-br flex items-center justify-center shadow-sm">
+                      <img
+                        src={Logo}
+                        alt="SmartSaldo Logo"
+                        className="w-40 h-18 object-contain"
+                      />
+                    </div>
+                  </div>          <nav className="flex-1 px-4 py-6 space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -221,8 +219,7 @@ export function Layout({ unreadNotifications, onReadAll }: LayoutProps) {
           <aside className="fixed inset-y-0 left-0 w-64 bg-white border-r border-stone-200 z-50">
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between h-16 px-6 border-b border-stone-200">
-                <Link
-                  to="/home"
+                <div
                   className="flex items-center gap-2 no-underline"
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -232,7 +229,7 @@ export function Layout({ unreadNotifications, onReadAll }: LayoutProps) {
                   <span className="text-slate-800 font-semibold">
                     SmartSaldo
                   </span>
-                </Link>
+                </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
                   className="text-slate-500 hover:text-slate-700"
