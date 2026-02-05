@@ -56,9 +56,9 @@ export default function Login() {
   const { login } = useAuth(); // Use the auth context
 
   const location = useLocation();
-  const state = location.state as { redirect?: string; plan?: string };
-  const redirect = state?.redirect || "/dashboard"; // Para onde vai após login
-  const plan = state?.plan;
+  const searchParams = new URLSearchParams(location.search);
+  const redirectParam = searchParams.get("redirect");
+  const redirect = redirectParam || "/dashboard"; // Para onde vai após login
 
   const {
     register,
@@ -75,11 +75,10 @@ export default function Login() {
     try {
       await login(data.email, data.password); // Use the login function from AuthContext
       toast.success("Login bem-sucedido! Redirecionando...");
+      // Consolidate navigation calls
       setTimeout(() => {
-        navigate(redirect, { state: { plan }, replace: true });
+        navigate(redirect, { replace: true });
       }, 1000);
-
-      setTimeout(() => navigate(redirect, { replace: true }), 1000);
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
         setLoginError("Credenciais inválidas. Verifique seu email e senha.");

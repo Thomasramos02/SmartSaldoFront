@@ -65,7 +65,7 @@ export default function Home() {
       onCtaClick: () => {
         if (!isAuthenticated) {
           // 🔹 Usuário não logado → vai para login e volta para pagamento depois
-          navigate("/login?redirect=/payment");
+          navigate(`/login?redirect=/payment?billingCycle=${billingCycle}`);
         } else {
           // 🔹 Usuário logado → abre Stripe diretamente
           stripeService.handlePremiumCheckout(

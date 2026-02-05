@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import AuthCallback from "./pages/AuthCallback";
 import ResetPassword from "./pages/ResetPassword";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
+import Payment from "./pages/Payment"; // Add this line
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import { AlertsProvider, useAlerts } from "./contexts/AlertsContext";
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="/alertas" element={<ProtectedAlertas />} />
             <Route path="/sugestoes" element={<SugestoesIA />} />
             <Route path="/configuracoes" element={<Configuracoes />} />
+            <Route path="/payment" element={<Payment />} /> {/* Add this line */}
 
             {/* 💳 Stripe precisa de login */}
           </Route>
