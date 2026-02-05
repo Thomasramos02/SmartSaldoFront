@@ -58,7 +58,9 @@ export default function Login() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const redirectParam = searchParams.get("redirect");
+  const planParam = searchParams.get("plan");
   const redirect = redirectParam || "/dashboard"; // Para onde vai após login
+  const plan = planParam || ""; // Plano selecionado (se houver)
 
   const {
     register,
@@ -505,12 +507,9 @@ export default function Login() {
                 Crie uma agora <ArrowRight className="inline h-4 w-4" />
               </Link>
             </p>
-
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-
