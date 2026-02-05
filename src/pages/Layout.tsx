@@ -32,7 +32,6 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { id: "home", label: "Home", icon: Home, path: "/home" },
   {
     id: "dashboard",
     label: "Dashboard",
@@ -57,7 +56,6 @@ const menuItems: MenuItem[] = [
 ];
 
 const pageLabels: Record<string, string> = {
-  home: "Home",
   dashboard: "Dashboard",
   gastos: "Gastos",
   categorias: "Categorias",
@@ -72,7 +70,7 @@ export function Layout({ unreadNotifications, onReadAll }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const currentPage = location.pathname.split("/")[1] || "home";
+  const currentPage = location.pathname.split("/")[1] || "dashboard";
   const isPremium = (user?.plan || "").toLowerCase().trim() === "premium";
 
   const getPageTitle = () => {
@@ -264,37 +262,6 @@ export function Layout({ unreadNotifications, onReadAll }: LayoutProps) {
                   );
                 })}
               </nav>
-
-              {!isPremium && (
-                <div className="px-4 pb-4">
-                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-                    <div className="text-xs font-semibold uppercase text-emerald-700">
-                      Upgrade Premium
-                    </div>
-                    <div className="text-sm text-slate-700 mt-1">
-                      Relatórios, projeções e importação automática.
-                    </div>
-                    <div className="mt-3 flex flex-col gap-2">
-                      <button
-                        onClick={() =>
-                          stripeService.handlePremiumCheckout("monthly")
-                        }
-                        className="w-full py-2 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                      >
-                        Assinar Mensal
-                      </button>
-                      <button
-                        onClick={() =>
-                          stripeService.handlePremiumCheckout("yearly")
-                        }
-                        className="w-full py-2 text-xs font-semibold rounded-lg bg-white text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors"
-                      >
-                        Assinar Anual (20% off)
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
 
               <div className="p-4 border-t border-stone-200">
                 <div className="flex items-center gap-3">
