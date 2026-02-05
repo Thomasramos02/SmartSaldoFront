@@ -23,8 +23,8 @@ import {
   Target,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import stripeService from "../services/stripeService";
 import GraficoSmartSaldo from "../assets/GraficoSmartSaldo.png";
+
 export default function Home() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
     "monthly",
@@ -32,6 +32,7 @@ export default function Home() {
 
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
   const plans = [
     {
       title: "Essencial",
@@ -65,12 +66,12 @@ export default function Home() {
       onCtaClick: () => {
         if (!isAuthenticated) {
           // 🔹 Usuário não logado → vai para login e volta para pagamento depois
-          navigate(`/login?redirect=/payment?billingCycle=${billingCycle}`);
-        } else {
-          // 🔹 Usuário logado → abre Stripe diretamente
-          stripeService.handlePremiumCheckout(
-            billingCycle === "monthly" ? "monthly" : "yearly",
+          navigate(
+            `/login?redirect=${encodeURIComponent(`/payment?billingCycle=${billingCycle}`)}`,
           );
+        } else {
+          // 🔹 Usuário logado → vai para página de payment que chama Stripe
+          navigate(`/payment?billingCycle=${billingCycle}`);
         }
       },
     },
@@ -121,6 +122,7 @@ export default function Home() {
       gradient: "bg-gradient-to-br from-green-500 to-emerald-600",
     },
   ];
+
   const testimonials = [
     {
       quote:
@@ -438,17 +440,7 @@ export default function Home() {
                   transition={{ duration: 0.4 }}
                   className="w-full max-w-sm"
                 >
-                  <PricingCard
-                    {...plan}
-                    onCtaClick={
-                      plan.title === "Premium"
-                        ? () =>
-                            stripeService.handlePremiumCheckout(
-                              billingCycle === "monthly" ? "monthly" : "yearly",
-                            )
-                        : undefined
-                    }
-                  />
+                  <PricingCard {...plan} />
                 </motion.div>
               ))}
             </div>
@@ -496,7 +488,7 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <p className="text-slate-600">“{t.quote}”</p>
+                  <p className="text-slate-600">"{t.quote}"</p>
                 </motion.div>
               ))}
             </div>
