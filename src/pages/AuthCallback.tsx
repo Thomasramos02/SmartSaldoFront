@@ -12,10 +12,18 @@ export default function AuthCallback() {
   useEffect(() => {
     async function handleAuth() {
       try {
+        const redirect = searchParams.get("redirect") || "/dashboard";
+
+        // Aguarda para cookies serem processados
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         await checkAuth();
 
+        toast.success("Login com Google bem-sucedido!");
 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate(redirect, { replace: true });
+      } catch (e: any) {
         toast.error("Falha na autenticação com Google.");
 
         await new Promise((resolve) => setTimeout(resolve, 3000));
