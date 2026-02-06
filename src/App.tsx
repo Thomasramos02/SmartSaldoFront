@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AuthCallback from "./pages/AuthCallback";
 import ResetPassword from "./pages/ResetPassword";
+import CookieConsent from "./components/CookieConsent";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import Payment from "./pages/Payment"; // Add this line
 import Terms from "./pages/Terms";
@@ -44,6 +45,7 @@ export default function App() {
   return (
     <AlertsProvider>
       <AnimatePresence mode="wait">
+        <CookieConsent />
         <Routes location={location} key={location.pathname}>
           {/* 🔓 Rotas públicas */}
           <Route path="/" element={<Home />} />
